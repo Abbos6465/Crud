@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="./main.css">
+  <title>TUIT LMS</title>
+</head>
+<body>
+  <main>
+    <section class="login">
+      <div class="row">
+      <div class="col-md-6 login__img">
+        <img src="https://lms.tuit.uz/assets/images/study.svg" alt="lms">
+      </div>
+      <div class="col-md-6 login__item d-flex align-items-center">
+       
+        <div class="login__item-content text-center mx-auto">
+          <h6 class="login__item-title text-uppercase w-50 mx-auto text-center">Muhammad al-xorazmiy nomidagi toshkent axborot texnalogiyalari universiteti</h6>
+          <img src="https://lms.tuit.uz/assets/images/logo-md.png" alt="" height="75" class="login__item-img">
+          <h6 class="login__item--title mt-5">
+            LEARNING MANAGEMENT SYSTEM
+          </h6> 
+          <div class="modal-toast alert alert-danger hide-toast p-3 w-75  mx-auto">
+          </div>
+          <form action="#" class="form" id="login">
+            <label for="login" class="w-75 my-2">
+              <span class="d-flex justify-content-start fw-semibold">Login</span>
+              <input type="text" id="user" required class="form-control mt-1 p-2" placeholder="Loginni kiriting">
+            </label>
+            <label for="password" class="w-75 my-2 position-relative">
+              <span class="d-flex justify-content-start fw-semibold">Parol</span>
+              <input type="password" required class="form-control mt-1 p-2 password" id="password" placeholder="Parolni kiriting">
+            <span class="password__slash"></span>
+            </label>
+            <button class="btn btn-primary w-75 my-2 p-1" type="submit" id="login-btn">Kirish</button>
+            <a href="./registration.html" class="link text-center d-block text-uppercase text-decoration-none my-2">
+              Ro'yhatdan o'tish
+            </a>
+          </form>
+        </div>
+      </div>
+    </div>
+    </section>
+  </main>
+</body>>
+<script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="./JavaScript/pulign.js"></script>
+<script src="./JavaScript/login.js"></script>
+</html>

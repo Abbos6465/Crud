@@ -1,11 +1,18 @@
 "use strict";
 // npx json ulash
 // ----- npx json-server --watch db.json --port 3000 ------ //
-let link='http://localhost:3000/user';
+let link='https://n36-todolist.herokuapp.com';
+let authToken = localStorage.getItem('token'); 
 
 // -------GET npx json-server --watch db.js --port 3000USER LIST ---------//
 function getUser(){
-  fetch(link)
+  fetch(`${link}/todos`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      token: authToken,
+    },
+  })
   .then((response)=>response.json())
   .then((result)=> renderData(result));
 }
@@ -20,16 +27,19 @@ function renderData(data=[]){
   let avarageScore=data.reduce((a,b)=>{
     return (a*1+b.score*1);
   },0)
+  if(data.length>0){
+  // $("#averager_score").innerHTML=(avarageScore/data.length*1).toFixed(2);
+  $("#averager_score").innerHTML='<h3>100</h3>';  
+}
 
-  $("#averager_score").innerHTML=(avarageScore/data.length*1).toFixed(2);
-
-  data.length>0 ? data.forEach((e,i,a)=>{
+  data.length>0 ?   
+  data.forEach((e,i,a)=>{
  
     const tr = createElement('tr',"item", `
     <tr>
       <td>   ${e.id}</td>
-    <td>${e.user_name}</td>
-    <td>${e.score}</td>
+    <td>${e.body}</td>
+    <td>${e.user_id}</td>
     <td><button class="btn btn-primary" data-edit="${e.id}"  data-bs-toggle="modal" data-bs-target="#exampleModal">EDIT</button></td>
     <td><button class="btn btn-danger" data-del="${e.id}">DELETE</button></td>
   </tr>
@@ -37,7 +47,7 @@ function renderData(data=[]){
   $('tbody').appendChild(tr);
 
   }): $("tbody").innerHTML='USERS LIST EMPTY'
-}
+} 
 
 // ------- RENDER FUNCTION END-------//
 
@@ -61,13 +71,20 @@ const addUser=()=>{
 
     setTimeout(()=>{
     $(".toastify").style.transform='translateX(200%)';
-      fetch(link,{
+      fetch(`${link}/todos`,{
         method:"POST",
         headers:{
           "Content-Type": "application/json",
+          token:authToken,
         },
-        body:JSON.stringify({user_name: userName, score:userScore})
+        body:JSON.stringify({text:userName,})
         })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    },2000)
+
+    setTimeout(()=>{
+      window.location.reload();  
     },3000)
   }
 }
@@ -93,14 +110,18 @@ const deleteUser=(id)=>{
 
 setTimeout(()=>{
   $('.toastify').style.transform='translateX(200%)';
-  fetch(`${link}/${id}`,{
+  fetch(`${link}/todos/${id}`,{
     method : "DELETE",
     headers: {
       "Content-Type": "application/json",
+      token: authToken
     },
     body:JSON.stringify({})  
   })
-},3000)
+},2000)
+setTimeout(() => {
+  window.location.reload();
+}, 3000);
 }
 
 // ------- DELETE FUNCTION END-------//
@@ -114,16 +135,22 @@ $('tbody').addEventListener('click',(e)=>{
 if(e.target.classList.contains('btn-primary')){
   let id=e.target.getAttribute('data-edit');
   localStorage.setItem('editUser',id);
-  fetch(`${link}/${id}`)
-  .then((res => res.json()))
-  .then((result => setValue(result)))
-  .catch((err) => console.log(err))
+  fetch(`${link}/todos/${id}`,{
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      token: authToken,
+    },
+  })
+  .then((res) => res.json())
+  .then((result) => setValue(result))
+  .catch((err) => console.log(err));
 }
 })
 
 
 function setValue(data){
-  $('#userEdit').value=data.user_name;
+  $('#userEdit').value=data.body;
   $('#scoreEdit').value=data.score;
 }
 
@@ -146,15 +173,15 @@ const updateUser=()=>{
     },3000)
   }
   else{
-    fetch(`${link}/${id}`,{
+    fetch(`${link}/todos/${id}`,{
       
       method: "PUT",
       headers: {
-         "Content-Type": "application/json"
+         "Content-Type": "application/json",
+         token:authToken
       },
       body: JSON.stringify({
-         user_name: newUser,
-         score: newScore
+         body:newUser 
       })
     })
   }
@@ -167,3 +194,21 @@ $('#sendEdit').addEventListener('submit', () => {
 
 
 // ------- EDIT FUNCTION END-------//
+
+
+  function logined(){
+    let userName=localStorage.getItem('userName');
+    if(userName){
+    $("#login_user").innerHTML=userName;
+    }
+    else{
+      window.location.replace('./login.html');
+    }
+  }
+
+  logined();
+
+$('#out').addEventListener('click', ()=>{
+  localStorage.clear();
+  logined();
+})
